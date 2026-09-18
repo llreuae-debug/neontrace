@@ -13,8 +13,9 @@ import {
   Zap,
   ArrowRight,
   Play,
+  Compass,
+  Lock,
 } from "lucide-react";
-
 
 const DEMO_USERS: DemoUser[] = [
   { id: "1", name: "Amina", lat: 40.7128, lng: -74.006, distance: 120, battery: 84, status: "live" },
@@ -131,8 +132,47 @@ export default function LandingPage() {
       {/* Animated particle canvas */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ opacity: 0.6 }} />
 
+      {/* Top Floating Landing Navigation */}
+      <header className="sticky top-0 z-50 px-4 sm:px-6 py-4 backdrop-blur-md bg-bg-primary/70 border-b border-white/5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div
+            onClick={() => router.push("/")}
+            className="flex items-center gap-2.5 cursor-pointer group"
+          >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+              <Zap className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-display font-bold text-lg tracking-tight text-white">NEONTRACE</span>
+          </div>
+
+          <nav className="hidden md:flex items-center gap-6 text-sm text-text-secondary">
+            <a href="/features" className="hover:text-cyan-400 transition-colors">Features</a>
+            <a href="/how-it-works" className="hover:text-cyan-400 transition-colors">How It Works</a>
+            <a href="/download" className="hover:text-cyan-400 transition-colors">Download</a>
+            <a href="/security" className="hover:text-cyan-400 transition-colors">Security</a>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <a
+              href="/auth/login"
+              className="text-xs sm:text-sm font-semibold text-text-secondary hover:text-white px-3 py-1.5 transition-colors"
+            >
+              Sign In
+            </a>
+            <NeonButton
+              size="sm"
+              variant="primary"
+              onClick={() => router.push("/main/dashboard")}
+              className="cursor-pointer"
+            >
+              <Compass className="w-4 h-4" /> Open Dashboard
+            </NeonButton>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative z-10 pt-20 sm:pt-32 pb-20 sm:pb-32 px-4 sm:px-6">
+      <section className="relative z-10 pt-16 sm:pt-24 pb-20 sm:pb-32 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -170,7 +210,7 @@ export default function LandingPage() {
                 className="text-lg text-text-secondary max-w-lg mb-10"
               >
                 Share your live location with the people you trust. See them on
-                the map. Stay in control.
+                the map. Stay in control with end-to-end encryption.
               </motion.p>
 
               <motion.div
@@ -179,16 +219,16 @@ export default function LandingPage() {
                 transition={{ delay: 0.8 }}
                 className="flex flex-wrap gap-4"
               >
-                <NeonButton size="xl" onClick={() => router.push("/auth/signup")}>
-                  Start Tracking
+                <NeonButton size="xl" onClick={() => router.push("/main/dashboard")}>
+                  Launch Dashboard
                   <ArrowRight className="w-5 h-5" />
                 </NeonButton>
                 <NeonButton
                   size="xl"
                   variant="ghost"
-                  onClick={() => router.push("/how-it-works")}
+                  onClick={() => router.push("/auth/login")}
                 >
-                  <Play className="w-5 h-5" /> Explore Demo
+                  <Lock className="w-5 h-5" /> Sign In with Google
                 </NeonButton>
               </motion.div>
 

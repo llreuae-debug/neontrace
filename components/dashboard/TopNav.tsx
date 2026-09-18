@@ -6,16 +6,7 @@ import { NeonButton } from "@/components/ui/NeonButton";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Search } from "lucide-react";
 import { useCommandPalette } from "@/hooks/useCommandPalette";
-import {
-  Map,
-  Users,
-  Activity,
-  User,
-  Settings,
-  Zap,
-  Shield,
-  Star,
-} from "lucide-react";
+import { Map, Users, Activity, User, Settings, Zap, Shield, Star, Compass } from "lucide-react";
 
 interface TopNavProps {
   currentPage: string;
@@ -23,6 +14,7 @@ interface TopNavProps {
 }
 
 const navItems = [
+  { key: "dashboard", label: "Dashboard", icon: Compass },
   { key: "map", label: "Map", icon: Map },
   { key: "people", label: "People", icon: Users },
   { key: "activity", label: "Activity", icon: Activity },

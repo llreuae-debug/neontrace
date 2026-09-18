@@ -10,6 +10,7 @@ interface BottomNavProps {
 }
 
 const navItems = [
+  { key: "dashboard", label: "Home", icon: Compass },
   { key: "map", label: "Map", icon: MapPin },
   { key: "people", label: "People", icon: Users },
   { key: "activity", label: "Activity", icon: Activity },
@@ -42,6 +43,9 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
   );
 }
 
+function Compass(props: React.SVGProps<SVGSVGElement>) {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 22 12 12 22 2 12 12 2" /><circle cx="12" cy="12" r="3" /></svg>;
+}
 function MapPin(props: React.SVGProps<SVGSVGElement>) {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
 }

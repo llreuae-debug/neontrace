@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { TopNav } from "@/components/dashboard/TopNav";
+import { BottomNav } from "@/components/dashboard/BottomNav";
 import { LocationSheet } from "@/components/dashboard/LocationSheet";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { LOCATION_MODES } from "@/lib/constants";
@@ -61,9 +62,9 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-bg-primary">
-      <TopNav currentPage="dashboard" onNavigate={() => {}} />
+      <TopNav currentPage="dashboard" onNavigate={(p) => router.push(p === "dashboard" ? "/main/dashboard" : `/main/${p}`)} />
 
-      <div className="h-[calc(100vh-64px)] relative">
+      <div className="h-[calc(100vh-64px-60px)] relative">
         <div ref={mapRef} className="w-full h-full" />
 
         <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
@@ -95,6 +96,8 @@ export default function DashboardPage() {
       {selectedUser && (
         <LocationSheet user={selectedUser} onClose={() => setSelectedUser(null)} onMessage={() => {}} onShare={() => router.push("/main/share")} />
       )}
+
+      <BottomNav currentPage="dashboard" onNavigate={(p) => router.push(p === "dashboard" ? "/main/dashboard" : `/main/${p}`)} />
     </div>
   );
 }

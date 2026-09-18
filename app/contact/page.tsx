@@ -4,12 +4,19 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { MapPin, Mail, Phone } from "lucide-react";
+import { MapPin, Mail, Phone, CheckCircle2 } from "lucide-react";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const handleSend = () => {
+    if (!name || !email || !message) return;
+    setSent(true);
+    setTimeout(() => { setSent(false); setName(""); setEmail(""); setMessage(""); }, 3000);
+  };
 
   return (
     <div className="min-h-screen bg-bg-primary pt-20 px-4 sm:px-6 pb-20 max-w-2xl mx-auto">
@@ -58,7 +65,10 @@ export default function ContactPage() {
               rows={4}
               className="w-full px-4 py-3 bg-bg-primary border border-white/10 rounded-xl outline-none focus:border-cyan-500/50 transition-all text-text-primary placeholder:text-text-muted resize-none"
             />
-            <NeonButton variant="primary" className="w-full">Send Message</NeonButton>
+            <NeonButton variant="primary" className="w-full" onClick={handleSend}>
+              {sent ? <CheckCircle2 className="w-4 h-4" /> : null}
+              {sent ? "Sent!" : "Send Message"}
+            </NeonButton>
           </div>
         </GlassCard>
       </motion.div>

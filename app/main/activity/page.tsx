@@ -29,8 +29,8 @@ export default function ActivityPage() {
 
   useEffect(() => {
     if (typeof window === "undefined" || !mapRef.current) return;
-    const L = require("leaflet");
-    require("leaflet/dist/leaflet.css");
+      const L = require("leaflet"); // eslint-disable-line @typescript-eslint/no-require-imports
+      require("leaflet/dist/leaflet.css"); // eslint-disable-line @typescript-eslint/no-require-imports
 
     const map = L.map(mapRef.current).setView([40.7128, -74.006], 14);
 

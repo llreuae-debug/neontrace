@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -9,21 +9,25 @@ import { LocationSheet } from "@/components/dashboard/LocationSheet";
 import { MapView } from "@/components/map/MapView";
 import { TopNav } from "@/components/dashboard/TopNav";
 import type { User } from "@/types";
-import { Map, Users, Shield, Clock, Zap, Eye, Radio, Save, Trash2 } from "lucide-react";
+import { Map, Users, Shield, Clock, Zap, Eye, Radio } from "lucide-react";
 
 const DEMO_USER: User = { id: "1", name: "Alex", status: "live", lat: 40.7128, lng: -74.006 };
+
+const DURATIONS = ["15 minutes", "30 minutes", "1 hour", "4 hours", "Until stopped"];
+
+function generateToken(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+}
 
 export default function SharePage() {
   const router = useRouter();
   const [duration, setDuration] = useState<string>("1 hour");
   const [recipients, setRecipients] = useState<string[]>([]);
+  const [showSheet, setShowSheet] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const durations = ["15 minutes", "30 minutes", "1 hour", "4 hours", "Until stopped"];
-
-  const generateToken = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-  };
+  const token = useMemo(() => generateToken(), []);
 
   return (
     <div className="min-h-screen bg-bg-primary pb-24">
@@ -36,18 +40,16 @@ export default function SharePage() {
             <p className="text-text-secondary">Control who sees your live location and for how long</p>
           </div>
 
-          {/* Map Preview */}
           <GlassCard className="mb-6 overflow-hidden">
             <div className="h-48 rounded-xl bg-bg-primary relative">
               <MapView currentUserLat={DEMO_USER.lat} currentUserLng={DEMO_USER.lng} showCurrentLocation={false} />
             </div>
           </GlassCard>
 
-          {/* Duration Selection */}
           <GlassCard className="mb-6">
             <h3 className="font-display font-semibold mb-4">Duration</h3>
             <div className="grid grid-cols-3 gap-2">
-              {durations.map((d) => (
+              {DURATIONS.map((d) => (
                 <button
                   key={d}
                   onClick={() => setDuration(d)}
@@ -63,7 +65,6 @@ export default function SharePage() {
             </div>
           </GlassCard>
 
-          {/* Recipients */}
           <GlassCard className="mb-6">
             <h3 className="font-display font-semibold mb-4">Share With</h3>
             <div className="space-y-2">
@@ -73,7 +74,7 @@ export default function SharePage() {
                     if (e.target.checked) setRecipients([...recipients, name]);
                     else setRecipients(recipients.filter((r) => r !== name));
                   }} className="w-4 h-4 rounded border-white/20 bg-bg-primary text-cyan-400 focus:ring-cyan-400" />
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-violet to-purple-600 flex items-center justify-center text-white text-xs font-bold">{name[0]}</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6366f1] to-[#7c3aed] flex items-center justify-center text-white text-xs font-bold">{name[0]}</div>
                   <span className="flex-1 font-medium">{name}</span>
                   <span className="text-xs text-text-muted">{Math.floor(Math.random() * 500 + 50)}m</span>
                 </label>
@@ -81,18 +82,26 @@ export default function SharePage() {
             </div>
           </GlassCard>
 
-          {/* Share Link */}
           <GlassCard className="mb-6">
             <h3 className="font-display font-semibold mb-3">Share Link</h3>
             <div className="flex items-center gap-2 p-3 bg-bg-primary rounded-xl border border-white/10">
-              <code className="flex-1 text-sm text-cyan-400 truncate">neontrace.app/share/{generateToken()}</code>
-              <NeonButton size="sm" variant="secondary">Copy</NeonButton>
+              <code className="flex-1 text-sm text-cyan-400 truncate">neontrace.app/share/{token}</code>
+              <NeonButton size="sm" variant="secondary" onClick={() => navigator.clipboard?.writeText(`neontrace.app/share/${token}`)}>Copy</NeonButton>
             </div>
           </GlassCard>
 
-          <NeonButton variant="primary" size="lg" className="w-full">
+          <NeonButton variant="primary" size="lg" className="w-full" onClick={() => { setSelectedUser(DEMO_USER); setShowSheet(true); }}>
             <Radio className="w-4 h-4" /> Start Sharing Session
           </NeonButton>
+
+          {showSheet && selectedUser && (
+            <LocationSheet
+              user={selectedUser}
+              onClose={() => setShowSheet(false)}
+              onMessage={() => { setShowSheet(false); router.push("/main/people"); }}
+              onShare={() => { setShowSheet(false); router.push("/main/map"); }}
+            />
+          )}
         </motion.div>
       </main>
     </div>

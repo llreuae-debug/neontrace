@@ -48,9 +48,9 @@ export default function NotificationsPage() {
             {["Sharing updates", "Session alerts", "Arrival notifications", "Emergency alerts"].map((pref) => (
               <div key={pref} className="flex items-center justify-between py-2">
                 <span className="text-sm">{pref}</span>
-                <button className={`w-10 h-6 rounded-full transition-all relative ${true ? "bg-cyan-500" : "bg-white/10"}`}>
-                  <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all translate-x-4" />
-                </button>
+                <div className={`w-10 h-6 rounded-full bg-cyan-500 relative`}>
+                  <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white transition-all translate-x-0" />
+                </div>
               </div>
             ))}
           </GlassCard>

@@ -1,5 +1,5 @@
 const CACHE_NAME = "neontrace-v1";
-const STATIC_ASSETS = ["/", "/main/dashboard", "/features", "/privacy"];
+const STATIC_ASSETS = ["/"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

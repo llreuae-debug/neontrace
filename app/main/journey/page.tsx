@@ -65,7 +65,7 @@ export default function JourneyPage() {
                 return (
                   <div key={i} className="relative flex items-start gap-4 mb-4">
                     <div className="w-8 h-8 rounded-full bg-bg-primary flex items-center justify-center border border-white/10 shrink-0 z-10">
-                      <Icon className="w-3.5 h-3.5 text-{item.color}" />
+                      <Icon className="w-3.5 h-3.5 text-cyan-400" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">{item.event}</p>

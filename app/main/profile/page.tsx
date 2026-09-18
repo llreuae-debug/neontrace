@@ -88,7 +88,7 @@ export default function ProfilePage() {
               <span className="font-medium">Notifications</span>
               <ChevronRight className="w-4 h-4 text-text-muted ml-auto" />
             </GlassCard>
-            <GlassCard className="flex items-center gap-3 cursor-pointer hover:border-white/15">
+            <GlassCard className="flex items-center gap-3 cursor-pointer hover:border-white/15" onClick={() => router.push("/main/settings")}>
               <Moon className="w-5 h-5 text-purple-400" />
               <span className="font-medium">Appearance</span>
               <ChevronRight className="w-4 h-4 text-text-muted ml-auto" />

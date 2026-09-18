@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | NEONTRACE",
   },
   description:
-    "Share your live location with people you trust. See them on the map. Stay in control. Location sharing with privacy at its core.",
+    "Share your live location with the people you trust. See them on the map. Stay in control. Location sharing with privacy at its core.",
   keywords: [
     "location sharing",
     "live tracking",
@@ -33,6 +33,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "NEONTRACE" }],
   creator: "NEONTRACE",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://neontrace.app"),
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
     siteName: "NEONTRACE",
     title: "NEONTRACE — Your people. Your places. Your world — live.",
     description:
-      "Share your live location with people you trust. See them on the map. Stay in control.",
+      "Share your live location with the people you trust. See them on the map. Stay in control. Location sharing with privacy at its core.",
     images: [
       {
         url: "/icons/og-image.png",
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NEONTRACE — Your people. Your places. Your world — live.",
     description:
-      "Share your live location with people you trust. See them on the map. Stay in control.",
+      "Share your live location with the people you trust. See them on the map. Stay in control.",
     images: ["/icons/og-image.png"],
   },
   robots: {

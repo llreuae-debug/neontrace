@@ -18,7 +18,7 @@ const navItems = [
 
 export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
   return (
-    <nav className="glass-strong fixed bottom-0 left-0 right-0 z-50 px-4 pb-safe">
+    <nav className="glass-strong fixed bottom-0 left-0 right-0 z-50 px-4 pb-[env(safe-area-inset-bottom)]">
       <div className="max-w-lg mx-auto flex items-center justify-around py-2">
         {navItems.map((item) => {
           const Icon = item.icon;

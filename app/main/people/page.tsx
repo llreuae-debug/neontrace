@@ -7,7 +7,6 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { TopNav } from "@/components/dashboard/TopNav";
 import { TrustCircleCard } from "@/components/dashboard/TrustCircleCard";
-import { MapView } from "@/components/map/MapView";
 import { Search } from "lucide-react";
 import type { User } from "@/types";
 

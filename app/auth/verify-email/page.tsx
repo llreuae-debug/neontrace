@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -9,13 +9,33 @@ import { ArrowLeft } from "lucide-react";
 
 export default function VerifyEmailPage() {
   const router = useRouter();
-  const [code, setCode] = useState("");
+  const [digits, setDigits] = useState<string[]>(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const handleChange = (index: number, val: string) => {
+    const char = val.slice(-1);
+    const newDigits = [...digits];
+    newDigits[index] = char;
+    setDigits(newDigits);
+    setError("");
+
+    if (char && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !digits[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const code = digits.join("");
     if (code.length !== 6) {
-      setError("Please enter the 6-digit code");
+      setError("Please enter the complete 6-digit code");
       return;
     }
     router.push("/main/dashboard");
@@ -46,12 +66,14 @@ export default function VerifyEmailPage() {
                 {[0, 1, 2, 3, 4, 5].map((i) => (
                   <input
                     key={i}
+                    ref={(el) => { inputRefs.current[i] = el; }}
                     type="text"
                     inputMode="numeric"
                     maxLength={1}
-                    value={code[i] || ""}
-                    readOnly
-                    className="w-12 h-14 text-center text-xl font-bold bg-bg-primary border border-white/10 rounded-xl outline-none text-text-primary"
+                    value={digits[i]}
+                    onChange={(e) => handleChange(i, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(i, e)}
+                    className="w-11 h-13 text-center text-xl font-bold bg-bg-primary border border-white/10 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 text-text-primary transition-all"
                   />
                 ))}
               </div>
@@ -64,9 +86,13 @@ export default function VerifyEmailPage() {
               Verify
             </button>
             <p className="text-center text-sm text-text-muted">
-              Didn't receive a code?{" "}
-              <button type="button" className="text-cyan-400 hover:underline">
-                Resend
+              Didn&apos;t receive a code?{" "}
+              <button
+                type="button"
+                onClick={() => setDigits(["1", "2", "3", "4", "5", "6"])}
+                className="text-cyan-400 hover:underline cursor-pointer"
+              >
+                Auto-fill demo code
               </button>
             </p>
           </form>
@@ -75,3 +101,4 @@ export default function VerifyEmailPage() {
     </div>
   );
 }
+

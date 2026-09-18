@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
 
 interface BottomNavProps {
   currentPage: string;

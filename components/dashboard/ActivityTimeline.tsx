@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   Ghost,
   KeyRound,
-  MapPin,
 } from "lucide-react";
 
 interface ActivityTimelineProps {

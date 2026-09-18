@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Radio, Crosshair } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -17,7 +17,6 @@ export default function MapPage() {
   const router = useRouter();
   const mapRef = useRef<HTMLDivElement>(null);
   const { location, isActive, start, stop } = useGeolocation();
-  const [tracking, setTracking] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined" || !mapRef.current) return;
@@ -72,7 +71,18 @@ export default function MapPage() {
                 <p className="font-display font-semibold">{isActive ? "Tracking Active" : "Not Tracking"}</p>
                 {location && <p className="text-xs text-cyan-400">{location.lat.toFixed(4)}, {location.lng.toFixed(4)}</p>}
               </div>
-              <button onClick={() => { isActive ? stop() : start(); setTracking(!tracking); }} className="px-4 py-2 text-xs font-medium rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/30 transition-colors">{isActive ? "Stop" : "Start"}</button>
+              <button
+                onClick={() => {
+                  if (isActive) {
+                    stop();
+                  } else {
+                    start();
+                  }
+                }}
+                className="px-4 py-2 text-xs font-medium rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/30 transition-colors cursor-pointer"
+              >
+                {isActive ? "Stop" : "Start"}
+              </button>
             </div>
           </GlassCard>
         </div>

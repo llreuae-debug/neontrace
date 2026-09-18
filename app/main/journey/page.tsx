@@ -1,14 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { TopNav } from "@/components/dashboard/TopNav";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { formatTimeAgo } from "@/lib/utils";
-import type { ActivityItem } from "@/types";
-import { Clock, MapPin, Navigation, Shield, Share2, CheckCircle2, Ghost, AlertCircle, KeyRound, Eye, Trash2 } from "lucide-react";
+import { MapPin, Navigation, CheckCircle2, Trash2 } from "lucide-react";
 
 const DEMO_JOURNEY = [
   { time: "09:12", event: "Left Home", icon: Navigation, color: "cyan" },
@@ -19,14 +16,6 @@ const DEMO_JOURNEY = [
   { time: "18:45", event: "Home", icon: CheckCircle2, color: "green" },
 ];
 
-const DEMO_ACTIVITIES: ActivityItem[] = [
-  { id: "1", type: "sharing_started", description: "Location sharing started with Amina", timestamp: Date.now() - 7200000 },
-  { id: "2", type: "arrived", description: "Arrived at Office", timestamp: Date.now() - 5400000 },
-  { id: "3", type: "location_viewed", description: "Marcus viewed your location", timestamp: Date.now() - 3600000 },
-  { id: "4", type: "sharing_expired", description: "Sharing session expired", timestamp: Date.now() - 1800000 },
-  { id: "5", type: "ghost_mode", description: "Ghost Mode was enabled", timestamp: Date.now() - 600000 },
-  { id: "6", type: "sharing_started", description: "Location sharing started with Sofia", timestamp: Date.now() - 120000 },
-];
 
 export default function JourneyPage() {
   const router = useRouter();

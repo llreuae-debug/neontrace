@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { TopNav } from "@/components/dashboard/TopNav";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { MapPin, Navigation, Clock, Star, Heart, Filter } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 const PLACES = [
   { id: "1", name: "Home", address: "123 Main St, New York", lat: 40.7128, lng: -74.006, type: "home" as const, distance: 0 },

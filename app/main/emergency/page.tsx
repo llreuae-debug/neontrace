@@ -7,7 +7,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { TopNav } from "@/components/dashboard/TopNav";
 import type { User } from "@/types";
-import { Radio, Shield, CheckCircle2, AlertTriangle, Clock, X, Send } from "lucide-react";
+import { Radio, Shield, AlertTriangle } from "lucide-react";
 
 const EMERGENCY_CONTACTS: User[] = [
   { id: "1", name: "Sarah", status: "live", distance: 120, battery: 84 },
@@ -28,9 +28,13 @@ export default function EmergencyPage() {
   };
 
   const startEmergency = () => {
+    setConfirming(true);
     setSharing(true);
-    setTimeout(() => { setSharing(false); setConfirming(false); }, 2000);
+    setTimeout(() => {
+      setSharing(false);
+    }, 1500);
   };
+
 
   return (
     <div className="min-h-screen bg-bg-primary pb-24">
@@ -69,7 +73,7 @@ export default function EmergencyPage() {
           </GlassCard>
 
           {!confirming ? (
-            <NeonButton variant="danger" size="xl" className="w-full" onClick={() => setConfirming(true)}>
+            <NeonButton variant="danger" size="xl" className="w-full" onClick={startEmergency}>
               <Radio className="w-5 h-5" /> EMERGENCY SHARE
             </NeonButton>
           ) : sharing ? (

@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 
 export function useSound() {
   const [enabled, setEnabled] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const getAudioContext = useCallback(() => {
+    if (typeof window === "undefined") return null;
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioCtx) {
+        audioContextRef.current = new AudioCtx();
+      }
     }
     return audioContextRef.current;
   }, []);
@@ -18,6 +22,7 @@ export function useSound() {
       if (!enabled) return;
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain);
@@ -40,7 +45,7 @@ export function useSound() {
         osc.start(ctx.currentTime);
         osc.stop(ctx.currentTime + s.duration);
       } catch {
-        // Silently fail
+        // Silently fail if audio context is blocked
       }
     },
     [enabled, getAudioContext]
@@ -53,3 +58,4 @@ export function useSound() {
 
   return { enabled, setEnabled, playSound, initSound };
 }
+

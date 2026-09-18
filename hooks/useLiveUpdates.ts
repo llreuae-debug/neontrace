@@ -5,13 +5,9 @@ import { formatTimeAgo, formatDistance } from "@/lib/utils";
 import type { User } from "@/types";
 
 export function useLiveUpdates(users: User[]) {
-  const [updatedUsers, setUpdatedUsers] = useState<User[]>(users);
-  const [lastUpdate, setLastUpdate] = useState<number>(Date.now());
+  const [updatedUsers, setUpdatedUsers] = useState<User[]>(() => users);
+  const [lastUpdate, setLastUpdate] = useState<number>(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    setUpdatedUsers(users);
-  }, [users]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -42,3 +38,5 @@ export function useLiveUpdates(users: User[]) {
 
   return { updatedUsers, lastUpdate, getTimeAgo, getDistance };
 }
+
+

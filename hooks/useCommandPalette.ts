@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export function useCommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setIsOpen((prev) => !prev);
-        if (!isOpen) setTimeout(() => inputRef.current?.focus(), 100);
       }
       if (e.key === "Escape") {
         setIsOpen(false);
@@ -21,11 +19,10 @@ export function useCommandPalette() {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [isOpen]);
+  }, []);
 
   const open = useCallback(() => {
     setIsOpen(true);
-    setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
 
   const close = useCallback(() => {
@@ -33,5 +30,6 @@ export function useCommandPalette() {
     setQuery("");
   }, []);
 
-  return { isOpen, query, setQuery, inputRef, open, close };
+  return { isOpen, query, setQuery, open, close };
 }
+

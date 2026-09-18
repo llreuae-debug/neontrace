@@ -1,10 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Bell } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
-import { useState } from "react";
-import { NeonBadge } from "@/components/ui/NeonBadge";
 
 export function NotificationBell() {
   const { unreadCount, notifications, markAsRead, markAllRead } = useNotifications();

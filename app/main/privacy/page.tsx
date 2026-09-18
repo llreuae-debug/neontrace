@@ -4,12 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { NeonButton } from "@/components/ui/NeonButton";
 import { TopNav } from "@/components/dashboard/TopNav";
 import {
   Shield,
   Eye,
-  EyeOff,
   Lock,
   Trash2,
   Clock,
@@ -28,7 +26,6 @@ export default function PrivacyPage() {
   });
 
   const score = settings.sharing ? 25 : 0;
-  const total = 100;
 
   return (
     <div className="min-h-screen bg-bg-primary pb-24">

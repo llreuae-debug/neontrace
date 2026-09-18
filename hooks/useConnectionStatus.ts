@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 export function useConnectionStatus() {
-  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [isOnline, setIsOnline] = useState<boolean>(() =>
+    typeof window !== "undefined" ? navigator.onLine : true
+  );
   const [effectiveType, setEffectiveType] = useState<string>("4g");
 
   useEffect(() => {
@@ -28,3 +30,4 @@ export function useConnectionStatus() {
 
   return { isOnline, effectiveType, status };
 }
+

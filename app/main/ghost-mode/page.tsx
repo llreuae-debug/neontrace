@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { TopNav } from "@/components/dashboard/TopNav";
-import { Ghost, EyeOff, Radio, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Ghost, EyeOff, Radio, AlertTriangle } from "lucide-react";
 
 export default function GhostModePage() {
   const router = useRouter();

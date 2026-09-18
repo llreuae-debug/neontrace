@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 interface SwitchProps {
   checked?: boolean;
   onChange?: (checked: boolean) => void;

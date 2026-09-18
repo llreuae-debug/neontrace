@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { LiveStatus } from "@/components/ui/LiveStatus";
-import { formatDistance, formatTimeAgo } from "@/lib/utils";
+import { formatDistance } from "@/lib/utils";
 import type { User } from "@/types";
 
 interface FloatingCardProps {
@@ -14,26 +12,21 @@ interface FloatingCardProps {
 }
 
 export function FloatingCard({ user, delay = 0 }: FloatingCardProps) {
-  const [timeAgo, setTimeAgo] = useState("");
-
-  useEffect(() => {
-    if (!user.distance) return;
-    const interval = setInterval(() => {
-      setTimeAgo(formatTimeAgo(Date.now() - ((user.distance ?? 0) * 100)));
-    }, 10000);
-    return () => clearInterval(interval);
-  }, [user.distance]);
+  // Deterministic positioning based on user id
+  const charCode = user.id ? user.id.charCodeAt(0) : 1;
+  const topPos = 20 + ((charCode * 17) % 45);
+  const leftPos = 10 + ((charCode * 31) % 65);
 
   return (
     <div
-      className="absolute"
+      className="absolute pointer-events-none select-none"
       style={{
-        top: `${20 + Math.random() * 50}%`,
-        left: `${10 + Math.random() * 70}%`,
+        top: `${topPos}%`,
+        left: `${leftPos}%`,
         animationDelay: `${delay}s`,
       }}
     >
-      <div className="animate-float-slow">
+      <div className="animate-float-slow pointer-events-auto">
         <GlassCard className="w-44 py-3 px-4" glow="cyan">
           <div className="flex items-center gap-3">
             <UserAvatar user={user} size="sm" showStatus />
@@ -53,3 +46,4 @@ export function FloatingCard({ user, delay = 0 }: FloatingCardProps) {
     </div>
   );
 }
+

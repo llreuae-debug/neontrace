@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h1 className="font-display text-3xl font-bold mb-2">Reset password</h1>
-          <p className="text-text-secondary">Enter your email and we'll send a reset link</p>
+          <p className="text-text-secondary">Enter your email and we&apos;ll send a reset link</p>
         </div>
 
         <GlassCard className="p-8">
@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
               </div>
               <p className="font-medium mb-2">Check your inbox</p>
               <p className="text-sm text-text-muted">
-                If an account exists for {email}, you'll receive a reset link shortly.
+                If an account exists for {email}, you&apos;ll receive a reset link shortly.
               </p>
             </div>
           ) : (

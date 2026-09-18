@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { generateId } from "@/lib/utils";
-import type { SharingSession, LocationData } from "@/types";
+import type { SharingSession } from "@/types";
 
 interface UseSharingReturn {
   session: SharingSession | null;
@@ -19,6 +19,16 @@ export function useSharing(onShare?: (session: SharingSession) => void): UseShar
   const [isSharing, setIsSharing] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const endSessionInternal = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setSession((prev) => (prev ? { ...prev, isActive: false } : null));
+    setIsSharing(false);
+    setRemainingTime(0);
+  }, []);
 
   const createSession = useCallback(
     async (options: { duration?: number; mode?: string; recipients?: string[] }) => {
@@ -56,18 +66,8 @@ export function useSharing(onShare?: (session: SharingSession) => void): UseShar
       setIsCreating(false);
       return newSession;
     },
-    [onShare]
+    [onShare, endSessionInternal]
   );
-
-  const endSessionInternal = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    setSession((prev) => (prev ? { ...prev, isActive: false } : null));
-    setIsSharing(false);
-    setRemainingTime(0);
-  }, []);
 
   const endSession = useCallback(() => {
     endSessionInternal();
@@ -81,3 +81,4 @@ export function useSharing(onShare?: (session: SharingSession) => void): UseShar
 
   return { session, isSharing, isCreating, createSession, endSession, remainingTime };
 }
+

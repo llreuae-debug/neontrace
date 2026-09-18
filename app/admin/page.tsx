@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { TopNav } from "@/components/dashboard/TopNav";
-import { Shield, Users, Activity, Bell, FileText, Settings, LogOut } from "lucide-react";
+import { Users, Activity, Bell, FileText, Settings, LogOut } from "lucide-react";
 
 export default function AdminPage() {
   const router = useRouter();

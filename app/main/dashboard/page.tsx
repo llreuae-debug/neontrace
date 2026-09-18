@@ -2,13 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { TopNav } from "@/components/dashboard/TopNav";
 import { BottomNav } from "@/components/dashboard/BottomNav";
 import { LocationSheet } from "@/components/dashboard/LocationSheet";
 import { useGeolocation } from "@/hooks/useGeolocation";
-import { LOCATION_MODES } from "@/lib/constants";
 import type { User } from "@/types";
 import { Crosshair, Layers, Compass } from "lucide-react";
 

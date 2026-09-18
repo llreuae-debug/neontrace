@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { TopNav } from "@/components/dashboard/TopNav";
-import { MapPin, Clock, Users, Navigation, CheckCircle2, AlertTriangle } from "lucide-react";
+import { MapPin, Navigation, CheckCircle2 } from "lucide-react";
 
 export default function SafeArrivalPage() {
   const router = useRouter();

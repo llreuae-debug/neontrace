@@ -9,15 +9,26 @@ import { LocationSheet } from "@/components/dashboard/LocationSheet";
 import { MapView } from "@/components/map/MapView";
 import { TopNav } from "@/components/dashboard/TopNav";
 import type { User } from "@/types";
-import { Map, Users, Shield, Clock, Zap, Eye, Radio } from "lucide-react";
+import { Radio } from "lucide-react";
 
 const DEMO_USER: User = { id: "1", name: "Alex", status: "live", lat: 40.7128, lng: -74.006 };
 
 const DURATIONS = ["15 minutes", "30 minutes", "1 hour", "4 hours", "Until stopped"];
 
+const CONTACTS_LIST = [
+  { name: "Amina", distance: 120 },
+  { name: "Marcus", distance: 340 },
+  { name: "Sofia", distance: 890 },
+  { name: "Kai", distance: 450 },
+];
+
 function generateToken(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  let res = "";
+  for (let i = 0; i < 6; i++) {
+    res += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return res;
 }
 
 export default function SharePage() {
@@ -53,7 +64,7 @@ export default function SharePage() {
                 <button
                   key={d}
                   onClick={() => setDuration(d)}
-                  className={`px-3 py-2.5 text-xs font-medium rounded-xl border transition-all ${
+                  className={`px-3 py-2.5 text-xs font-medium rounded-xl border transition-all cursor-pointer ${
                     duration === d
                       ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/30"
                       : "bg-white/5 text-text-secondary border-white/10 hover:bg-white/10"
@@ -68,15 +79,22 @@ export default function SharePage() {
           <GlassCard className="mb-6">
             <h3 className="font-display font-semibold mb-4">Share With</h3>
             <div className="space-y-2">
-              {["Amina", "Marcus", "Sofia", "Kai"].map((name) => (
+              {CONTACTS_LIST.map(({ name, distance }) => (
                 <label key={name} className="flex items-center gap-3 p-3 rounded-xl bg-bg-primary cursor-pointer hover:bg-white/5 transition-colors">
-                  <input type="checkbox" checked={recipients.includes(name)} onChange={(e) => {
-                    if (e.target.checked) setRecipients([...recipients, name]);
-                    else setRecipients(recipients.filter((r) => r !== name));
-                  }} className="w-4 h-4 rounded border-white/20 bg-bg-primary text-cyan-400 focus:ring-cyan-400" />
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6366f1] to-[#7c3aed] flex items-center justify-center text-white text-xs font-bold">{name[0]}</div>
+                  <input
+                    type="checkbox"
+                    checked={recipients.includes(name)}
+                    onChange={(e) => {
+                      if (e.target.checked) setRecipients([...recipients, name]);
+                      else setRecipients(recipients.filter((r) => r !== name));
+                    }}
+                    className="w-4 h-4 rounded border-white/20 bg-bg-primary text-cyan-400 focus:ring-cyan-400 cursor-pointer"
+                  />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6366f1] to-[#7c3aed] flex items-center justify-center text-white text-xs font-bold">
+                    {name[0]}
+                  </div>
                   <span className="flex-1 font-medium">{name}</span>
-                  <span className="text-xs text-text-muted">{Math.floor(Math.random() * 500 + 50)}m</span>
+                  <span className="text-xs text-text-muted">{distance}m</span>
                 </label>
               ))}
             </div>
@@ -86,11 +104,29 @@ export default function SharePage() {
             <h3 className="font-display font-semibold mb-3">Share Link</h3>
             <div className="flex items-center gap-2 p-3 bg-bg-primary rounded-xl border border-white/10">
               <code className="flex-1 text-sm text-cyan-400 truncate">neontrace.app/share/{token}</code>
-              <NeonButton size="sm" variant="secondary" onClick={() => navigator.clipboard?.writeText(`neontrace.app/share/${token}`)}>Copy</NeonButton>
+              <NeonButton
+                size="sm"
+                variant="secondary"
+                onClick={() => {
+                  if (typeof navigator !== "undefined" && navigator.clipboard) {
+                    navigator.clipboard.writeText(`https://neontrace.app/share/${token}`);
+                  }
+                }}
+              >
+                Copy
+              </NeonButton>
             </div>
           </GlassCard>
 
-          <NeonButton variant="primary" size="lg" className="w-full" onClick={() => { setSelectedUser(DEMO_USER); setShowSheet(true); }}>
+          <NeonButton
+            variant="primary"
+            size="lg"
+            className="w-full"
+            onClick={() => {
+              setSelectedUser(DEMO_USER);
+              setShowSheet(true);
+            }}
+          >
             <Radio className="w-4 h-4" /> Start Sharing Session
           </NeonButton>
 
@@ -98,8 +134,14 @@ export default function SharePage() {
             <LocationSheet
               user={selectedUser}
               onClose={() => setShowSheet(false)}
-              onMessage={() => { setShowSheet(false); router.push("/main/people"); }}
-              onShare={() => { setShowSheet(false); router.push("/main/map"); }}
+              onMessage={() => {
+                setShowSheet(false);
+                router.push("/main/people");
+              }}
+              onShare={() => {
+                setShowSheet(false);
+                router.push("/main/map");
+              }}
             />
           )}
         </motion.div>
@@ -107,3 +149,4 @@ export default function SharePage() {
     </div>
   );
 }
+

@@ -37,7 +37,7 @@ export function NeonMapMarker({
   };
 
   return (
-    <div className={cn("relative inline-flex items-center justify-center", className)}>
+    <div className={cn("relative inline-flex items-center justify-center", className)} data-lat={lat} data-lng={lng}>
       {isPulse && (
         <div
           className={cn(

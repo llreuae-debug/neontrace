@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { FloatingCard } from "@/components/sections/FloatingCards";
 import { DemoUser } from "@/types";
 import {
   MapPin,
@@ -16,6 +14,7 @@ import {
   ArrowRight,
   Play,
 } from "lucide-react";
+
 
 const DEMO_USERS: DemoUser[] = [
   { id: "1", name: "Amina", lat: 40.7128, lng: -74.006, distance: 120, battery: 84, status: "live" },
@@ -61,7 +60,7 @@ export default function LandingPage() {
     if (!ctx) return;
 
     let animFrame: number;
-    let particles: { x: number; y: number; vx: number; vy: number; size: number }[] = [];
+    const particles: { x: number; y: number; vx: number; vy: number; size: number }[] = [];
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;

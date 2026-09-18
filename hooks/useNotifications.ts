@@ -44,14 +44,14 @@ export function useNotifications() {
   }, []);
 
   useEffect(() => {
-    if (Notification.permission === "default") {
+    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
     }
   }, []);
 
   const sendBrowserNotification = useCallback(
     (title: string, body?: string) => {
-      if (Notification.permission === "granted") {
+      if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
         new Notification(title, { body });
       }
     },
@@ -68,3 +68,4 @@ export function useNotifications() {
     sendBrowserNotification,
   };
 }
+

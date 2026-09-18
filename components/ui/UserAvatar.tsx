@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { User } from "@/types";
 
@@ -43,16 +42,24 @@ export function UserAvatar({ user, size = "md", showStatus = true, className }: 
     <div className={cn("relative inline-flex", className)}>
       <div
         className={cn(
-          "rounded-full flex items-center justify-center font-display font-bold text-white bg-gradient-to-br from-blue-violet to-purple-600 border border-white/10 shrink-0",
+          "rounded-full flex items-center justify-center font-display font-bold text-white bg-gradient-to-br from-blue-violet to-purple-600 border border-white/10 shrink-0 overflow-hidden",
           sizeClasses[size]
         )}
       >
         {user.avatar ? (
-          <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+          <Image
+            src={user.avatar}
+            alt={user.name}
+            width={80}
+            height={80}
+            className="w-full h-full rounded-full object-cover"
+            unoptimized
+          />
         ) : (
           initials
         )}
       </div>
+
       {showStatus && (
         <span
           className={cn(

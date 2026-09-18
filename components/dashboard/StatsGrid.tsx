@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { NeonButton } from "@/components/ui/NeonButton";
 import { MapPin, Shield, Clock, Activity, BarChart3, Users } from "lucide-react";
 import type { User } from "@/types";
 

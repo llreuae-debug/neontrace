@@ -4,17 +4,22 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { LOCATION_MODES } from "@/lib/constants";
 import type { LocationData } from "@/types";
 
+export interface GeolocationCustomError {
+  code: number;
+  message: string;
+}
+
 interface UseGeolocationOptions {
   mode?: keyof typeof LOCATION_MODES;
   enableHighAccuracy?: boolean;
   onLocationChange?: (location: LocationData) => void;
-  onError?: (error: GeolocationPositionError) => void;
+  onError?: (error: GeolocationCustomError) => void;
 }
 
 interface UseGeolocationReturn {
   location: LocationData | null;
   isLoading: boolean;
-  error: GeolocationPositionError | null;
+  error: GeolocationCustomError | null;
   isActive: boolean;
   start: () => void;
   stop: () => void;
@@ -23,10 +28,10 @@ interface UseGeolocationReturn {
 export function useGeolocation(
   options: UseGeolocationOptions = {}
 ): UseGeolocationReturn {
-  const { mode = "balanced", onLocationChange, onError } = options;
+  const { mode = "BALANCED", onLocationChange, onError } = options;
   const [location, setLocation] = useState<LocationData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<GeolocationPositionError | null>(null);
+  const [error, setError] = useState<GeolocationCustomError | null>(null);
   const [isActive, setIsActive] = useState(false);
   const watchIdRef = useRef<number | null>(null);
   const lastPositionRef = useRef<{ lat: number; lng: number } | null>(null);
@@ -64,6 +69,7 @@ export function useGeolocation(
         timestamp: position.timestamp,
       };
       setLocation(locData);
+      setError(null);
       onLocationChange?.(locData);
     },
     [onLocationChange]
@@ -71,34 +77,45 @@ export function useGeolocation(
 
   const handleError = useCallback(
     (err: GeolocationPositionError) => {
-      setError(err);
-      onError?.(err);
+      const customErr: GeolocationCustomError = {
+        code: err.code,
+        message: err.message || "Location access denied or unavailable",
+      };
+      setError(customErr);
+      onError?.(customErr);
     },
     [onError]
   );
 
   const start = useCallback(() => {
-    if (!("geolocation" in navigator)) {
-      const err = new GeolocationPositionError();
-      (err as unknown as { code: number; message: string }).code = 2;
-      (err as unknown as { code: number; message: string }).message = "Geolocation not available";
+    if (typeof window === "undefined" || !navigator.geolocation) {
+      const err: GeolocationCustomError = {
+        code: 2,
+        message: "Geolocation is not supported by your browser",
+      };
       setError(err);
+      onError?.(err);
       return;
     }
 
     setIsLoading(true);
     const config = getConfig();
-    watchIdRef.current = navigator.geolocation.watchPosition(
-      handleSuccess,
-      handleError,
-      config
-    );
-    setIsActive(true);
-    setIsLoading(false);
-  }, [getConfig, handleSuccess, handleError]);
+    try {
+      watchIdRef.current = navigator.geolocation.watchPosition(
+        handleSuccess,
+        handleError,
+        config
+      );
+      setIsActive(true);
+    } catch {
+      setError({ code: 0, message: "Failed to start location tracking" });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getConfig, handleSuccess, handleError, onError]);
 
   const stop = useCallback(() => {
-    if (watchIdRef.current !== null) {
+    if (watchIdRef.current !== null && typeof window !== "undefined" && navigator.geolocation) {
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
     }
@@ -108,7 +125,7 @@ export function useGeolocation(
 
   useEffect(() => {
     return () => {
-      if (watchIdRef.current !== null) {
+      if (watchIdRef.current !== null && typeof window !== "undefined" && navigator.geolocation) {
         navigator.geolocation.clearWatch(watchIdRef.current);
       }
     };
@@ -123,3 +140,4 @@ export function useGeolocation(
     stop,
   };
 }
+

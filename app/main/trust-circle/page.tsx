@@ -8,9 +8,8 @@ import { TopNav } from "@/components/dashboard/TopNav";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { TrustCircleCard } from "@/components/dashboard/TrustCircleCard";
 import { UserAvatar } from "@/components/ui/UserAvatar";
-import { LiveStatus } from "@/components/ui/LiveStatus";
 import type { User } from "@/types";
-import { Plus, X, Shield, Ban, Eye, EyeOff, MessageCircle } from "lucide-react";
+import { Plus, Eye } from "lucide-react";
 
 const DEMO_CONTACTS: User[] = [
   { id: "1", name: "Amina", status: "live", distance: 120, battery: 84 },

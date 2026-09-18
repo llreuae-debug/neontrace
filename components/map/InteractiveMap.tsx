@@ -9,7 +9,7 @@ interface InteractiveMapProps {
   location?: { lat: number; lng: number; accuracy?: number } | null;
   selectedUser?: User | null;
   onSelectUser?: (user: User) => void;
-  mapLayer?: "dark" | "streets";
+  mapLayer?: "dark" | "streets" | "google" | "satellite";
   center?: [number, number];
   zoom?: number;
   className?: string;
@@ -58,15 +58,34 @@ export function InteractiveMap({
 
       mapInstanceRef.current = map;
 
-      const tileUrl =
-        mapLayer === "dark"
-          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+      // Check for Google Maps Key from env or localStorage
+      const googleKey =
+        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
+        (typeof window !== "undefined" ? localStorage.getItem("neontrace_google_maps_key") : "") ||
+        "";
+
+      let tileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+      let subdomains = "abcd";
+      let attribution = "&copy; OpenStreetMap contributors &copy; CARTO";
+
+      if (mapLayer === "streets") {
+        tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+        attribution = "&copy; OpenStreetMap contributors";
+      } else if (mapLayer === "google" || mapLayer === "satellite") {
+        const keyParam = googleKey ? `&key=${googleKey}` : "";
+        if (mapLayer === "satellite") {
+          tileUrl = `https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}${keyParam}`;
+        } else {
+          tileUrl = `https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}${keyParam}`;
+        }
+        subdomains = "0123";
+        attribution = "&copy; Google Maps";
+      }
 
       L.tileLayer(tileUrl, {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        subdomains: "abcd",
-        maxZoom: 19,
+        attribution,
+        subdomains,
+        maxZoom: 20,
       }).addTo(map);
 
       // Create a layer group for contacts

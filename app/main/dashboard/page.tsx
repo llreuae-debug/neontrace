@@ -31,7 +31,13 @@ export default function DashboardPage() {
   const { location, isActive, start, stop } = useGeolocation();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [ghostModeActive, setGhostModeActive] = useState(false);
-  const [mapLayer, setMapLayer] = useState<"dark" | "streets">("dark");
+  const [mapLayer, setMapLayer] = useState<"dark" | "streets" | "satellite">("dark");
+
+  const toggleMapLayer = () => {
+    if (mapLayer === "dark") setMapLayer("satellite");
+    else if (mapLayer === "satellite") setMapLayer("streets");
+    else setMapLayer("dark");
+  };
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col overflow-hidden">
@@ -56,7 +62,6 @@ export default function DashboardPage() {
           <button
             onClick={() => {
               if (location) {
-                // Trigger view update
                 start();
               }
             }}
@@ -66,11 +71,14 @@ export default function DashboardPage() {
             <Crosshair className="w-5 h-5 text-cyan-400" />
           </button>
           <button
-            onClick={() => setMapLayer((prev) => (prev === "dark" ? "streets" : "dark"))}
-            title="Toggle Map Style"
-            className="glass rounded-xl p-3 hover:bg-white/10 transition-all active:scale-95 shadow-lg border border-white/10 cursor-pointer"
+            onClick={toggleMapLayer}
+            title={`Current Layer: ${mapLayer}. Click to toggle Google Satellite / Dark / Streets`}
+            className="glass rounded-xl p-3 hover:bg-white/10 transition-all active:scale-95 shadow-lg border border-white/10 cursor-pointer flex items-center justify-center relative group"
           >
             <Layers className="w-5 h-5 text-purple-400" />
+            <span className="absolute right-full mr-2 px-2 py-1 rounded bg-black/80 text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+              {mapLayer === "dark" ? "Dark Matter" : mapLayer === "satellite" ? "Google Satellite" : "Streets"}
+            </span>
           </button>
           <button
             onClick={() => setGhostModeActive((prev) => !prev)}
@@ -93,6 +101,9 @@ export default function DashboardPage() {
               {ghostModeActive ? "Ghost Mode Active" : "Trust Circle Live"}
             </span>
             <span className="text-xs text-cyan-400 font-bold ml-1">4 Nearby</span>
+            <span className="text-[10px] text-purple-400 font-mono ml-1 px-1.5 py-0.5 rounded bg-white/5 uppercase">
+              {mapLayer}
+            </span>
           </div>
         </div>
 
